@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <qualifier value="transactionManager" />
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+
+        <property name="packagesToScan">
+            <list>
+                <value>uk.ac.liverpool.online.asamoah.dissertation.fingerprinting.model</value>
+            </list>
+        </property>
+        <property name="persistenceUnitName" value="fingerprinting-PU"/>
+
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                
+                <prop key="hibernate.connection.driverClassName">${jdbc.driverClassName}</prop>
+                <prop key="hibernate.connection.url">${jdbc.url}</prop>
+                <prop key="hibernate.connection.username">${jdbc.username}</prop>
+                <prop key="hibernate.connection.password">${jdbc.password}</prop>
+                
+                <prop key="hibernate.connection.provider_class">${connection.provider_class}</prop>
+                <prop key="hibernate.c3p0.max_size">${c3p0.max_size}</prop>
+                <prop key="hibernate.c3p0.min_size">${c3p0.min_size}</prop>
+                <prop key="hibernate.c3p0.acquire_increment">${c3p0.acquire_increment}</prop>
+                <prop key="hibernate.c3p0.idle_test_period">${c3p0.idle_test_period}</prop>
+                <prop key="hibernate.c3p0.max_statements">${c3p0.max_statements}</prop>
+                <prop key="hibernate.c3p0.timeout">${c3p0.timeout}</prop>
+                <prop key="jadira.usertype.autoRegisterUserTypes">true</prop>
+                <prop key="jadira.usertype.databaseZone">jvm</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+
+    <jpa:repositories base-package="uk.ac.liverpool.online.asamoah.dissertation.fingerprinting.model" entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager"/>
+</beans>
