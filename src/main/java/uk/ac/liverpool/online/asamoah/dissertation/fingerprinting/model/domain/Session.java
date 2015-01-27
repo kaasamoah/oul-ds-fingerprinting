@@ -32,7 +32,8 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Session.findById", query = "SELECT s FROM Session s WHERE s.id = :id"),
     @NamedQuery(name = "Session.findByStartTime", query = "SELECT s FROM Session s WHERE s.startTime = :startTime"),
     @NamedQuery(name = "Session.findByEndTime", query = "SELECT s FROM Session s WHERE s.endTime = :endTime"),
-    @NamedQuery(name = "Session.findByKey", query = "SELECT s FROM Session s WHERE s.key = :key")})
+    @NamedQuery(name = "Session.findByKey", query = "SELECT s FROM Session s WHERE s.key = :key"),
+    @NamedQuery(name = "Device.findByUserId", query = "SELECT DISTINCT s FROM Session s WHERE s.user.id = :userId")})
 public class Session implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,17 +49,19 @@ public class Session implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endTime;
     @Basic(optional = false)
-    @Column(name = "key")
+    @Column(name = "session_key")
     private String key;
+    @Column(name = "location")
+    private String location;
     @JoinColumn(name = "user", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User user;
     @JoinColumn(name = "device", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Device device;
+    private DeviceConfig deviceConfig;
     @JoinColumn(name = "browser", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Browser browser;
+    private BrowserConfig browser;
 
     public Session() {
     }
@@ -105,6 +108,20 @@ public class Session implements Serializable {
         this.key = key;
     }
 
+    /**
+     * @return the location
+     */
+    public String getLocation() {
+        return location;
+    }
+
+    /**
+     * @param location the location to set
+     */
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public User getUser() {
         return user;
     }
@@ -113,19 +130,19 @@ public class Session implements Serializable {
         this.user = user;
     }
 
-    public Device getDevice() {
-        return device;
+    public DeviceConfig getDeviceConfig() {
+        return deviceConfig;
     }
 
-    public void setDevice(Device device) {
-        this.device = device;
+    public void setDeviceConfig(DeviceConfig config) {
+        this.deviceConfig = config;
     }
 
-    public Browser getBrowser() {
+    public BrowserConfig getBrowser() {
         return browser;
     }
 
-    public void setBrowser(Browser browser) {
+    public void setBrowser(BrowserConfig browser) {
         this.browser = browser;
     }
 

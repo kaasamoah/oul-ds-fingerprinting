@@ -5,7 +5,10 @@
  */
 package uk.ac.liverpool.online.asamoah.dissertation.fingerprinting.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,6 +21,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -48,16 +53,19 @@ public class User implements Serializable {
     private String password;
     @Column(name = "fullname")
     private String fullname;
-    @Basic(optional = false)
     @Column(name = "secret_question")
     private String secretQuestion;
-    @Basic(optional = false)
     @Column(name = "secret_answer")
     private String secretAnswer;
+    @Column(name = "date_added")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateAdded;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<Session> sessions;
+    private Set<Session> sessions = new HashSet<Session>();
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private Set<Device> devices;
+    private Set<Device> devices = new HashSet<Device>();
 
     public User() {
     }
@@ -122,12 +130,31 @@ public class User implements Serializable {
         this.secretAnswer = secretAnswer;
     }
 
+    /**
+     * @return the dateAdded
+     */
+    public Date getDateAdded() {
+        return dateAdded;
+    }
+
+    /**
+     * @param dateAdded the dateAdded to set
+     */
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
+    }
+
     public Set<Session> getSessions() {
         return sessions;
     }
 
     public void setSessions(Set<Session> sessionCollection) {
         this.sessions = sessionCollection;
+    }
+    
+    public void addSession(Session session){
+        session.setUser(this);
+        this.sessions.add(session);
     }
 
     public Set<Device> getDevices() {
@@ -136,6 +163,11 @@ public class User implements Serializable {
 
     public void setDevices(Set<Device> deviceCollection) {
         this.devices = deviceCollection;
+    }
+    
+    public void addDevice(Device device){
+        device.setOwner(this);
+        this.devices.add(device);
     }
 
     @Override

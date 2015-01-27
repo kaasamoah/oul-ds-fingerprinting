@@ -1,0 +1,49 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 14-Dec-2014, 12:42:42
+    Author     : Kofi A. Asamoah <kofi.asamoah@online.liverpool.ac.uk>
+*/
+
+body{
+    //background-color: #003C50; /*#000F1F;*/
+    //background-image: url('../images/fingerprint.png');
+    //background-repeat: repeat-y;
+}
+
+#header{
+    color: #FFFFFF;
+    background-color: #005065;
+    padding: 20px;
+}
+
+.modal-header{
+    color: #FFFFFF;
+    background-color: #005065;
+}
+
+.modal-footer{
+    background-color: #dadada;
+}
+
+#main-container{
+    //background-image: url('../images/fingerprint.png');
+    //background-repeat: repeat;
+}
+
+#content{
+    background: #FFFFFF;
+}
+
+#footer{
+    background-color: #003C50;
+    color: #FFFFFF;
+    padding: 10px;
+}
+
+.header-text{
+    //color: #FFFFFF;
+}

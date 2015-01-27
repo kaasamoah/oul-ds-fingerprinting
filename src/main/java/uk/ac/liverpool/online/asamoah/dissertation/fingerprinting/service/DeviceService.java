@@ -5,6 +5,7 @@
  */
 package uk.ac.liverpool.online.asamoah.dissertation.fingerprinting.service;
 
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.ac.liverpool.online.asamoah.dissertation.fingerprinting.model.domain.Device;
@@ -19,7 +20,15 @@ public class DeviceService {
     @Autowired
     private DeviceRepository deviceRepo;
     
+    public Device getById(int deviceId){
+        return deviceRepo.findOne(deviceId);
+    }
+    
     public Device saveDevice(Device device){
         return deviceRepo.save(device);
+    }
+    
+    public Set<Device> getUserDevices(int userId){
+        return deviceRepo.findByOwnerId(userId);
     }
 }
